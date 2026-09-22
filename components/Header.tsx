@@ -82,7 +82,7 @@ export default function Header() {
             <Image src="/brand/logo1.png" alt="MatriQx" width={432} height={85} priority className="h-[30px] w-auto" />
           </a>
 
-          <ul className="hidden items-center gap-1 lg:flex">
+          <ul className="ml-auto mr-3 hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
               <li key={item.label} className="group relative">
                 <a
