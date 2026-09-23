@@ -27,16 +27,6 @@
 .heroNote { font-size: 12px; color: #69758a; margin-top: 26px; }
 .heroBottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 23px; border-top: 1px solid #d9e3ef; font-size: 10px; letter-spacing: .13em; color: #5b6477; }
 .heroBottom a { display: flex; align-items: center; gap: 18px; letter-spacing: 0; font-size: 13px; color: #010f31; }
-.network { position: relative; min-width: 0; width: 100%; }
-.networkSvg { width: 100%; height: auto; overflow: visible; }
-.visualLabel { position: absolute; top: 0; right: 0; color: #607b96; font-size: 9px; letter-spacing: .17em; }
-.orbits { transform-origin: 300px 280px; animation: orbit 70s linear infinite; }
-@keyframes orbit { to { transform: rotate(360deg); } }
-.networkTag { position: absolute; background: #ffffffeb; border: 1px solid #cfe0ef; box-shadow: 0 8px 24px #014a8710; padding: 12px 17px; font-size: 11px; color: #164c7c; }
-.tagOne { top: 22%; left: 0; }
-.tagTwo { top: 54%; right: -12px; }
-.tagThree { bottom: 12%; left: 13%; }
-.visualCaption { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 11px; color: #5b6477; }
 .section { padding-block: 104px; scroll-margin-top: 24px; }
 .section h2 { font-family: var(--font-display); font-size: clamp(36px,4vw,56px); font-weight: 400; line-height: 1.1; letter-spacing: -.04em; }
 .section h2 span { color: #7b899d; }
@@ -129,7 +119,6 @@
   .heroGrid { grid-template-columns: 1fr; gap: 45px; }
   .heroCopy { max-width: 660px; }
   .hero h1 { font-size: clamp(64px,11vw,88px); }
-  .network { max-width: 550px; margin-inline: auto; }
   .section { padding-block: 72px; }
   .sectionHeading { grid-template-columns: 1fr; gap: 20px; margin-bottom: 35px; }
   .solutionLayout { grid-template-columns: 1fr; gap: 28px; }
@@ -155,10 +144,6 @@
   .heroDescription { font-size: 17px; max-width: 340px; }
   .actions { gap: 15px; }
   .heroNote { max-width: 275px; line-height: 1.6; }
-  .visualLabel { font-size: 8px; }
-  .networkTag { font-size: 9px; padding: 8px 10px; }
-  .tagTwo { right: 0; }
-  .visualCaption { font-size: 10px; }
   .heroBottom { align-items: flex-start; flex-direction: column; gap: 12px; padding-block: 20px; }
   .section { padding-block: 58px; }
   .section h2 { font-size: 36px; }
@@ -191,4 +176,4 @@
   .contactRow { flex-direction: column; align-items: flex-start; gap: 30px; }
   .contact h2 { font-size: 55px; }
 }
-@media (prefers-reduced-motion: reduce) { .orbits { animation: none; } .featureImage img, .textLink svg { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .featureImage img, .textLink svg { transition: none; } }
