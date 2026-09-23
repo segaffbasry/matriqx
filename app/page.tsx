@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
-        <About />
         <Solutions />
         <Scaling />
+        <About />
         <Insights />
       </main>
       <Footer />

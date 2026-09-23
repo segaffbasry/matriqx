@@ -1,108 +1,57 @@
-import Image from "next/image";
-import { hero, services } from "@/lib/content";
-import { Arrow, Badge, Button, Rich, Words } from "./ui";
-import HeroVideo from "./HeroVideo";
+import { Arrow, Button } from "./ui";
+import styles from "./Redesign.module.css";
+
+// A deterministic scientific network illustration, rendered without WebGL or video.
+function DiscoveryNetwork() {
+  const points = Array.from({ length: 140 }, (_, i) => {
+    const y = 1 - (i / 139) * 2;
+    const radius = Math.sqrt(1 - y * y);
+    const angle = i * 2.39996323;
+    const z = Math.sin(angle) * radius;
+    return { x: 300 + Math.cos(angle) * radius * 208, y: 280 + y * 208, z };
+  });
+  return (
+    <div className={styles.network}>
+      <span className={styles.visualLabel}>THE CONNECTED SCIENCE ECOSYSTEM</span>
+      <svg viewBox="0 0 600 560" aria-hidden="true" className={styles.networkSvg}>
+        <defs>
+          <radialGradient id="network-glow"><stop stopColor="#2698ff" stopOpacity=".22"/><stop offset="1" stopColor="#086ad8" stopOpacity="0"/></radialGradient>
+        </defs>
+        <circle cx="300" cy="280" r="265" fill="url(#network-glow)" />
+        <g className={styles.orbits}>
+          <ellipse cx="300" cy="280" rx="274" ry="104" fill="none" stroke="#086ad8" strokeOpacity=".22" transform="rotate(-32 300 280)" />
+          <ellipse cx="300" cy="280" rx="254" ry="122" fill="none" stroke="#086ad8" strokeOpacity=".15" transform="rotate(48 300 280)" />
+        </g>
+        {points.flatMap((p, i) => points.slice(i + 1).map((q, j) => {
+          const d = Math.hypot(p.x - q.x, p.y - q.y);
+          return d < 65 && Math.abs(p.z - q.z) < .65 ? <line key={`${i}-${j}`} x1={p.x} y1={p.y} x2={q.x} y2={q.y} stroke="#086ad8" strokeOpacity={.1 + (p.z + 1) * .13} /> : null;
+        }))}
+        {points.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={p.z > .4 ? 3.8 : 2} fill={p.z > .4 ? "#086ad8" : "#80b9ee"} opacity={.4 + (p.z + 1) * .3} />)}
+        <circle cx="300" cy="280" r="46" fill="#086ad8" />
+        <path d="M280 262h12l8 12 8-12h12l-14 19 15 20h-13l-8-12-8 12h-13l15-20z" fill="white" />
+      </svg>
+      <span className={`${styles.networkTag} ${styles.tagOne}`}>01 / Scientific data</span>
+      <span className={`${styles.networkTag} ${styles.tagTwo}`}>02 / AI + human insight</span>
+      <span className={`${styles.networkTag} ${styles.tagThree}`}>03 / Discovery</span>
+      <div className={styles.visualCaption}><span className={styles.statusDot} /> Connected intelligence. Shared possibility.</div>
+    </div>
+  );
+}
 
 export default function Hero() {
   return (
-    <>
-      <section id="top" data-hero className="relative isolate overflow-hidden bg-ink text-white">
-        <div data-hero-media className="absolute inset-0 -z-10">
-          <Image
-            src="/images/bg-overlay.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-90"
-          />
-          <HeroVideo id={hero.video} />
+    <section id="top" data-hero className={styles.hero}>
+      <div className={`${styles.container} ${styles.heroGrid}`}>
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}><span className={styles.statusDot} /> AI-NATIVE. HUMAN-DRIVEN.</p>
+          <h1>Science.<br />Connected.<br /><span>Accelerated.</span></h1>
+          <p className={styles.heroDescription}>Unlock the full value of scientific data with AI, automation, and federated intelligence.</p>
+          <div className={styles.actions}><Button href="#solutions" reveal={false}>Explore our solutions</Button><a href="#contact" className={styles.textLink}>Talk to our experts <Arrow /></a></div>
+          <p className={styles.heroNote}>Advancing drug discovery, life sciences & materials innovation.</p>
         </div>
-        {/* Legibility wash + brand glow */}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(1,15,49,0.55)_0%,rgba(1,15,49,0.25)_40%,rgba(1,15,49,0.9)_100%)]" />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_85%_20%,rgba(8,106,216,0.35),transparent_70%)]" />
-        <div className="grid-lines pointer-events-none absolute inset-0 -z-10" />
-
-        <div className="mx-auto flex min-h-[100svh] max-w-[1280px] flex-col justify-center px-5 pb-56 pt-40 sm:px-8 lg:pb-64 lg:pt-48">
-          <div data-stagger data-delay="0.1">
-            <Badge dark>{hero.eyebrow}</Badge>
-          </div>
-
-          <h1
-            data-split
-            className="mt-7 max-w-[1080px] font-display text-[clamp(2.5rem,6.4vw,5.6rem)] font-semibold leading-[1.02] tracking-[-0.035em]"
-          >
-            <Words text={hero.titleLead} />
-            <Words text={hero.titleTail} className="text-white/45" />
-          </h1>
-
-          <div data-stagger data-delay="0.9" className="mt-9 flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <p data-reveal className="max-w-[560px] text-[1.075rem] leading-relaxed text-white/70 [&_strong]:text-white">
-              <Rich parts={hero.body} />
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button href={hero.primary.href} variant="light">
-                {hero.primary.label}
-              </Button>
-              <Button href={hero.secondary.href} variant="ghost">
-                {hero.secondary.label}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <a
-          href="#services"
-          aria-label="Scroll to content"
-          className="absolute bottom-40 left-1/2 hidden -translate-x-1/2 lg:block"
-        >
-          <span className="mouse block" />
-        </a>
-      </section>
-
-      {/* Service cards overlap the hero's lower edge */}
-      <section id="services" className="relative z-10 -mt-32 px-5 sm:px-8 lg:-mt-36">
-        <div data-stagger className="mx-auto grid max-w-[1280px] gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((s, i) => (
-            <a
-              key={s.cta + i}
-              href={s.href}
-              data-reveal
-              className="group relative flex min-h-[340px] flex-col overflow-hidden rounded-[18px] border border-line/70 bg-white p-7 shadow-(--shadow-card) transition-[transform,box-shadow] duration-700 ease-(--ease-out-expo) hover:-translate-y-2 hover:shadow-(--shadow-lift)"
-            >
-              {/* Brand fill blooms from the icon on hover */}
-              <span
-                aria-hidden
-                className="absolute left-7 top-7 -z-0 size-14 scale-0 rounded-full bg-(image:--gradient-brand) transition-transform duration-[900ms] ease-(--ease-out-expo) group-hover:scale-[16]"
-              />
-              <span className="relative flex items-start justify-between">
-                <span className="grid size-14 place-items-center rounded-xl bg-mist transition-colors duration-700 group-hover:bg-white/15">
-                  <Image
-                    src={s.icon}
-                    alt=""
-                    width={50}
-                    height={50}
-                    className="size-8 transition-[transform,filter] duration-700 ease-(--ease-out-expo) group-hover:scale-110 group-hover:brightness-0 group-hover:invert"
-                  />
-                </span>
-                <span className="font-display text-sm font-medium text-soft transition-colors duration-700 group-hover:text-white/60">
-                  0{i + 1}
-                </span>
-              </span>
-              <h3 className="relative mt-12 font-display text-[1.6rem] font-semibold leading-[1.1] tracking-[-0.02em] transition-colors duration-700 group-hover:text-white">
-                {s.title.join(" ")}
-              </h3>
-              <p className="relative mt-3 text-[15px] leading-relaxed text-muted transition-colors duration-700 group-hover:text-white/80">
-                {s.text}
-              </p>
-              <span className="relative mt-auto flex items-center gap-2 pt-7 text-[14px] font-semibold text-brand transition-colors duration-700 group-hover:text-white">
-                <span className="ulink">{s.cta}</span>
-                <Arrow className="transition-transform duration-700 ease-(--ease-out-expo) group-hover:translate-x-1" />
-              </span>
-            </a>
-          ))}
-        </div>
-      </section>
-    </>
+        <DiscoveryNetwork />
+      </div>
+      <div className={`${styles.container} ${styles.heroBottom}`}><span>COMPLEX DATA. MEANINGFUL INSIGHTS.</span><a href="#solutions">Discover the possibilities <Arrow className="rotate-90" /></a></div>
+    </section>
   );
 }

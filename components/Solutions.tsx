@@ -1,66 +1,42 @@
+"use client";
+
 import Image from "next/image";
-import { solutions } from "@/lib/content";
-import { Arrow, Badge, Button, Words } from "./ui";
+import { useRef, useState } from "react";
+import { services, solutions } from "@/lib/content";
+import { Arrow } from "./ui";
+import styles from "./Redesign.module.css";
 
+const options = [
+  { ...solutions.items[0], outcome: "From hypothesis to insight.", label: "Discovery science" },
+  { ...solutions.items[1], outcome: "Explore the next material breakthrough.", label: "Materials science" },
+  { ...solutions.items[2], outcome: "Make your data work together.", label: "Data engineering" },
+  { title: services[0].title, text: services[0].text, href: services[0].href, image: "/images/materials-science.png", outcome: "Move innovation beyond the pilot.", label: "Digital transformation" },
+];
 export default function Solutions() {
+  const [active, setActive] = useState(0);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const selected = options[active];
   return (
-    <section id="solutions" className="px-5 pb-28 sm:px-8 lg:pb-36">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="mx-auto max-w-3xl text-center">
-          <Badge>{solutions.eyebrow}</Badge>
-          <h2
-            data-split
-            className="mt-6 font-display text-[clamp(2.4rem,5vw,4.4rem)] font-semibold leading-[1.02] tracking-[-0.035em]"
-          >
-            <Words text="Our" /> <Words text="Solutions" className="text-brand" />
-          </h2>
-        </div>
-
-        <div data-stagger className="mt-16 grid gap-5 md:grid-cols-3">
-          {solutions.items.map((s, i) => (
-            <a
-              key={s.href}
-              href={s.href}
-              data-reveal
-              className="group relative isolate flex aspect-[3/4] min-h-[460px] flex-col justify-end overflow-hidden rounded-[18px] bg-ink p-7 text-white md:aspect-auto md:h-[560px]"
-            >
-              <Image
-                src={s.image}
-                alt=""
-                fill
-                sizes="(min-width:768px) 33vw, 100vw"
-                className="-z-10 object-cover transition-transform duration-[1400ms] ease-(--ease-out-expo) group-hover:scale-110"
-              />
-              <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(1,15,49,0)_25%,rgba(1,15,49,0.92)_100%)] transition-opacity duration-700" />
-              <div className="absolute inset-0 -z-10 bg-[linear-gradient(195deg,rgba(8,106,216,0.75),rgba(1,15,49,0.95))] opacity-0 transition-opacity duration-700 ease-(--ease-out-expo) group-hover:opacity-100" />
-
-              <span className="absolute left-7 top-7 rounded-md border border-white/25 bg-white/10 px-3 py-1 font-display text-xs font-medium backdrop-blur-md">
-                0{i + 1}
-              </span>
-              <span className="absolute right-7 top-7 grid size-12 place-items-center rounded-[10px] bg-white text-ink transition-colors duration-700 ease-(--ease-out-expo) group-hover:bg-sky group-hover:text-white">
-                <Arrow size={16} className="-rotate-45 transition-transform duration-700 ease-(--ease-out-expo) group-hover:rotate-0" />
-              </span>
-
-              <h3 className="font-display text-[2.1rem] font-semibold leading-[1.02] tracking-[-0.03em]">
-                {s.title[0]}
-                <br />
-                <span className="text-ice">{s.title[1]}</span>
-              </h3>
-              {/* Description rises into place on hover */}
-              <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-700 ease-(--ease-out-expo) group-hover:grid-rows-[1fr] max-md:grid-rows-[1fr]">
-                <p className="overflow-hidden text-[15px] leading-relaxed text-white/80">
-                  <span className="block pt-4">{s.text}</span>
-                </p>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <div data-reveal className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <span className="text-[1.05rem] text-muted">{solutions.moreLead}</span>
-          <Button href={solutions.more.href} reveal={false}>
-            {solutions.more.label}
-          </Button>
+    <section id="solutions" className={`${styles.section} ${styles.solutions}`}>
+      <div className={styles.container}>
+        <div className={styles.sectionHeading}><p className={styles.eyebrow}>01 / POSSIBILITIES, UNLOCKED</p><h2>Where will your<br /><span>next breakthrough begin?</span></h2></div>
+        <div className={styles.solutionLayout}>
+          <div className={styles.solutionTabs} role="tablist" aria-label="Explore solutions">
+            {options.map((item, i) => <button key={item.label} ref={el => { tabs.current[i] = el; }} type="button" role="tab" id={`solution-tab-${i}`} aria-selected={active === i} aria-controls="solution-panel" tabIndex={active === i ? 0 : -1} onClick={() => setActive(i)} onKeyDown={e => {
+              let next = i;
+              if (e.key === "ArrowDown" || e.key === "ArrowRight") next = (i + 1) % options.length;
+              else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = (i + options.length - 1) % options.length;
+              else if (e.key === "Home") next = 0;
+              else if (e.key === "End") next = options.length - 1;
+              else return;
+              e.preventDefault(); setActive(next); tabs.current[next]?.focus();
+            }} className={active === i ? styles.activeTab : undefined}><span className={styles.tabNumber}>0{i + 1}</span><span>{item.label}</span><Arrow /></button>)}
+            <p className={styles.solutionAside}>Different disciplines.<br />One connected approach to science.</p>
+          </div>
+          <div id="solution-panel" role="tabpanel" aria-labelledby={`solution-tab-${active}`} tabIndex={0} className={styles.solutionPanel}>
+            <div className={styles.solutionImage}><Image key={selected.image} src={selected.image} alt={`${selected.label} at MatriQx`} fill sizes="(min-width: 900px) 60vw, 100vw" className="object-cover" /><span className={styles.imageCaption}>MATRIQX / {selected.label.toUpperCase()}</span></div>
+            <div className={styles.solutionDetail}><div><h3>{selected.outcome}</h3><p>{selected.text}</p></div><a href={selected.href} className={styles.roundLink} aria-label={`Explore ${selected.label}`}><Arrow size={23} className="-rotate-45" /></a></div>
+          </div>
         </div>
       </div>
     </section>
