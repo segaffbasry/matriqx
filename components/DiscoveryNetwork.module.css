@@ -1,5 +1,4 @@
 .network { width: 100%; min-width: 0; position: relative; color: #086ad8; }
-.topline { display: flex; justify-content: space-between; gap: 20px; color: #617892; font-size: 8px; letter-spacing: .12em; border-top: 1px solid #cdddea; padding-top: 14px; }
 .scene { position: relative; aspect-ratio: 600 / 520; background: radial-gradient(ellipse, #e4f1fe 0%, transparent 68%); }
 .canvas { width: 100%; height: 100%; display: block; opacity: 0; }
 .network[data-ready="true"] .canvas { opacity: 1; }
@@ -8,4 +7,3 @@
 .cross { position: absolute; font-size: 22px; font-weight: 300; color: #9fbed9; }
 .crossOne { left: 0; top: 20%; }.crossTwo { right: 0; bottom: 20%; }
 @media (max-width: 899px) { .network { max-width: 580px; margin-inline: auto; } }
-@media (max-width: 599px) { .topline { font-size: 7px; gap: 12px; } }

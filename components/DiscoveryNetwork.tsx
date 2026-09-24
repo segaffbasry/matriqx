@@ -97,7 +97,6 @@ export default function DiscoveryNetwork() {
 
   return (
     <div ref={root} className={styles.network}>
-      <div className={styles.topline}><span>MATRIQX</span><span>AI · AUTOMATION · FEDERATED INTELLIGENCE</span></div>
       <div className={styles.scene}>
         <svg viewBox="0 0 156 88" aria-hidden="true" className={styles.fallback}>{BRAND_PATHS.map(d => <path key={d} d={d} fill="currentColor" />)}</svg>
         <canvas ref={canvas} aria-hidden="true" className={styles.canvas} />
