@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { BRAND_PATHS } from "@/lib/brand";
 import styles from "./DiscoveryNetwork.module.css";
 
@@ -11,12 +11,10 @@ function subscribeMotion(callback: () => void) {
 }
 
 export default function DiscoveryNetwork() {
-  const [paused, setPaused] = useState(false);
   const reduced = useSyncExternalStore(subscribeMotion, () => window.matchMedia("(prefers-reduced-motion: reduce)").matches, () => false);
   const canvas = useRef<HTMLCanvasElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const clock = useRef(0);
-  const pointer = useRef({ x: 300, y: 270, active: false });
 
   useEffect(() => {
     const element = canvas.current;
@@ -38,37 +36,42 @@ export default function DiscoveryNetwork() {
       return { target, x: Math.cos(angle) * radius, y, z: Math.sin(angle) * radius, seed: (i * .6180339) % 1 };
     });
     let frame = 0, last = 0, visible = true;
-    const moving = !paused && !reduced;
+    const moving = !reduced;
     const draw = (now: number) => {
       frame = 0;
       if (last && moving) clock.current += Math.min((now - last) / 1000, .05);
       last = now;
       const t = clock.current;
-      const cycle = t % 16;
-      // Long holds make the mark readable between gentle particle transitions.
-      const blend = reduced ? 1 : cycle < 4 ? 1 : cycle < 7 ? 1 - (cycle - 4) / 3 : cycle < 11 ? 0 : cycle < 14 ? (cycle - 11) / 3 : 1;
+      const cycle = t % 18;
+      // The logo stays legible while breathing gently, then flows into a rotating cloud.
+      const blend = reduced ? 1 : cycle < 3 ? 1 : cycle < 8 ? 1 - (cycle - 3) / 5 : cycle < 11 ? 0 : cycle < 16 ? (cycle - 11) / 5 : 1;
       const morph = blend * blend * (3 - 2 * blend);
       ctx.clearRect(0, 0, 600, 520);
+      const angle = t * .18;
+      const tilt = Math.sin(t * .22) * .2;
+      const breath = moving ? 1 + Math.sin(t * .85) * .018 : 1;
+      const float = moving ? Math.sin(t * .65) * 5 : 0;
+      const flow = Math.sin(morph * Math.PI);
       for (const p of particles) {
-        const angle = t * .14;
         const x = p.x * Math.cos(angle) + p.z * Math.sin(angle);
         const z = p.z * Math.cos(angle) - p.x * Math.sin(angle);
         const perspective = 1 + z * .12;
         const sx = 300 + x * 202 * perspective;
-        const sy = 255 + p.y * 202 * perspective;
+        const sy = 255 + (p.y * Math.cos(tilt) - z * Math.sin(tilt)) * 202 * perspective;
         let px = sx * (1 - morph) + p.target.x * morph;
         let py = sy * (1 - morph) + p.target.y * morph;
         if (moving) {
-          px += Math.sin(t * .6 + p.seed * 12) * (1 - morph) * 7;
-          py += Math.cos(t * .5 + p.seed * 12) * (1 - morph) * 7;
-          if (pointer.current.active) {
-            const dx = px - pointer.current.x, dy = py - pointer.current.y;
-            const distance = Math.hypot(dx, dy);
-            if (distance < 85 && distance > 0) { const force = (1 - distance / 85) ** 2 * 16; px += dx / distance * force; py += dy / distance * force; }
-          }
+          // Curved paths avoid a mechanical straight-line dissolve.
+          px += Math.sin(p.seed * Math.PI * 2 + t * .4) * flow * 24;
+          py += Math.cos(p.seed * Math.PI * 2 + t * .4) * flow * 18;
+          px = 300 + (px - 300) * breath;
+          py = 255 + (py - 255) * breath + float;
+          px += Math.sin(t * 1.1 + p.target.y * .035) * 1.5;
+          py += Math.cos(t * .9 + p.target.x * .025) * 1.5;
         }
         const depth = (z + 1) / 2;
-        const alpha = (.2 + depth * .65) * (1 - morph) + .85 * morph;
+        const shimmer = moving ? .06 * Math.sin(t * 1.2 + p.seed * 12) : 0;
+        const alpha = (.2 + depth * .65) * (1 - morph) + (.8 + shimmer) * morph;
         ctx.fillStyle = `rgba(8,106,216,${alpha})`;
         ctx.beginPath(); ctx.arc(px, py, (1.1 + depth * 1.1) * (1 - morph) + 1.65 * morph, 0, Math.PI * 2); ctx.fill();
       }
@@ -90,20 +93,16 @@ export default function DiscoveryNetwork() {
     size.observe(container); intersection.observe(container);
     document.addEventListener("visibilitychange", visibility);
     return () => { stop(); size.disconnect(); intersection.disconnect(); document.removeEventListener("visibilitychange", visibility); delete container.dataset.ready; };
-  }, [paused, reduced]);
+  }, [reduced]);
 
   return (
     <div ref={root} className={styles.network}>
       <div className={styles.topline}><span>MATRIQX</span><span>AI · AUTOMATION · FEDERATED INTELLIGENCE</span></div>
-      <div className={styles.scene} onPointerMove={event => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        pointer.current = { x: (event.clientX - rect.left) / rect.width * 600, y: (event.clientY - rect.top) / rect.height * 520, active: event.pointerType === "mouse" };
-      }} onPointerLeave={() => { pointer.current.active = false; }}>
+      <div className={styles.scene}>
         <svg viewBox="0 0 156 88" aria-hidden="true" className={styles.fallback}>{BRAND_PATHS.map(d => <path key={d} d={d} fill="currentColor" />)}</svg>
         <canvas ref={canvas} aria-hidden="true" className={styles.canvas} />
         <span className={`${styles.cross} ${styles.crossOne}`} aria-hidden>+</span><span className={`${styles.cross} ${styles.crossTwo}`} aria-hidden>+</span>
       </div>
-      <div className={styles.controls}><span>AI-Native Machine Learning</span><button type="button" disabled={reduced} onClick={() => setPaused(!paused)} aria-label={reduced ? "Animation disabled: reduced motion" : paused ? "Resume network animation" : "Pause network animation"}>{reduced ? "Reduced motion" : paused ? "Play motion ▷" : "Pause motion Ⅱ"}</button></div>
     </div>
   );
 }

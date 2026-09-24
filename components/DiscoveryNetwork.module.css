@@ -7,8 +7,5 @@
 .network[data-ready="true"] .fallback { visibility: hidden; }
 .cross { position: absolute; font-size: 22px; font-weight: 300; color: #9fbed9; }
 .crossOne { left: 0; top: 20%; }.crossTwo { right: 0; bottom: 20%; }
-.controls { border-top: 1px solid #cdddea; padding-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 15px; font-size: 10px; color: #69758a; }
-.controls button { cursor: pointer; color: #164c7c; min-height: 36px; padding: 6px 10px; border: 1px solid #d8e5f1; border-radius: 3px; }
-.controls button:hover { background: white; }.controls button:focus-visible { outline: 2px solid #086ad8; outline-offset: 4px; }.controls button:disabled { cursor: default; color: #69758a; }
 @media (max-width: 899px) { .network { max-width: 580px; margin-inline: auto; } }
-@media (max-width: 599px) { .topline { font-size: 7px; gap: 12px; } .controls { font-size: 9px; } }
+@media (max-width: 599px) { .topline { font-size: 7px; gap: 12px; } }
