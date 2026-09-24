@@ -1,3 +1,4 @@
+import BrandIntro from "@/components/BrandIntro";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -10,6 +11,7 @@ import Motion from "@/components/Motion";
 export default function Home() {
   return (
     <>
+      <BrandIntro />
       <Header />
       <main id="main" tabIndex={-1}>
         <Hero />

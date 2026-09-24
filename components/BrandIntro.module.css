@@ -1,0 +1,15 @@
+.intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: #f8fbff; pointer-events: none; animation: uncover .75s 1.8s cubic-bezier(.76,0,.24,1) both; }
+.intro[hidden] { display: none; }
+.content { width: 250px; position: relative; display: grid; place-items: center; }
+.mark { width: 156px; overflow: visible; animation: markOut .45s 1.35s ease both; }
+.line { fill: none; stroke: #53b0f7; stroke-width: 1; stroke-dasharray: 1; animation: lineIn .65s ease both; }
+.trace { fill: #53b0f7; fill-opacity: 0; stroke: #53b0f7; stroke-width: .8; stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace 1.05s cubic-bezier(.4,0,.2,1) forwards; }
+.wordmark { position: absolute; width: 250px; height: auto; animation: wordmarkIn .5s 1.25s ease both; }
+.rule { position: absolute; bottom: 0; left: 0; height: 2px; width: 100%; background: #53b0f7; transform-origin: left; animation: ruleIn 1.8s cubic-bezier(.16,1,.3,1) both; }
+@keyframes lineIn { 0% { stroke-dashoffset: 1; } 45% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes trace { 60% { stroke-dashoffset: 0; fill-opacity: 0; } 100% { stroke-dashoffset: 0; fill-opacity: 1; } }
+@keyframes wordmarkIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes markOut { to { opacity: 0; transform: scale(.9); } }
+@keyframes uncover { to { clip-path: inset(0 0 100% 0); visibility: hidden; } }
+@keyframes ruleIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .intro { display: none; } }
