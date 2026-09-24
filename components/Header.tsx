@@ -26,7 +26,7 @@ export default function Header() {
       <nav className={`${styles.container} ${styles.nav}`} aria-label="Main">
         <a href="#top" aria-label="MatriQx home"><Image src="/brand/logo1.png" alt="MatriQx" width={432} height={85} preload className={styles.logo} /></a>
         <div className={styles.desktopLinks}>{links.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</div>
-        <a className={styles.navContact} href={site.contact}>Contact Us <Arrow /></a>
+        <a className={styles.navContact} href={site.contact}><span className={styles.navContactLabel}>Contact Us</span><span className={styles.navContactArrow} aria-hidden><Arrow /><Arrow /></span></a>
         <button ref={toggle} type="button" className={styles.menuToggle} onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"}>{open ? "Close −" : "Menu +"}</button>
       </nav>
       <nav id="mobile-nav" aria-label="Mobile" hidden={!open} className={styles.mobileNav}>{links.map(link => <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}<Arrow /></a>)}<a href={site.contact}>Contact Us <Arrow /></a></nav>

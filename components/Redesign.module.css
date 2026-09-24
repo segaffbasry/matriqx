@@ -4,7 +4,17 @@
 .logo { width: 164px; height: auto; }
 .desktopLinks { display: flex; gap: 26px; margin-left: auto; font-size: 15px; font-weight: 500; }
 .desktopLinks a:hover { color: #086ad8; }
-.navContact { display: flex; align-items: center; gap: 28px; background: #086ad8; color: white; padding: 15px 22px; border-radius: 4px; font-weight: 600; }
+.navContact { display: flex; align-items: center; gap: 28px; background: #086ad8; color: white; padding: 15px 22px; border-radius: 4px; font-weight: 600; position: relative; overflow: hidden; isolation: isolate; box-shadow: 0 0 0 rgba(8,106,216,0); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+.navContact::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #07152f; transform: scaleX(0); transform-origin: right; transition: transform .5s cubic-bezier(.7,0,.2,1); }
+.navContact:hover, .navContact:focus-visible { transform: translateY(-2px); box-shadow: 0 12px 28px -12px rgba(8,106,216,.7); }
+.navContact:hover::before, .navContact:focus-visible::before { transform: scaleX(1); transform-origin: left; }
+.navContact:active { transform: translateY(0) scale(.98); transition-duration: .1s; }
+.navContact:focus-visible { outline: 2px solid #086ad8; outline-offset: 3px; }
+.navContactArrow { position: relative; display: grid; width: 14px; height: 14px; overflow: hidden; }
+.navContactArrow svg { grid-area: 1 / 1; transition: transform .45s cubic-bezier(.7,0,.2,1); }
+.navContactArrow svg:last-child { transform: translateX(-150%); }
+.navContact:hover .navContactArrow svg:first-child, .navContact:focus-visible .navContactArrow svg:first-child { transform: translateX(150%); }
+.navContact:hover .navContactArrow svg:last-child, .navContact:focus-visible .navContactArrow svg:last-child { transform: translateX(0); }
 .menuToggle { display: none; }
 .mobileNav[hidden] { display: none; }
 .mobileNav { padding: 0 24px 24px; background: white; }
@@ -149,7 +159,7 @@
   .contactRow { flex-direction: column; align-items: flex-start; gap: 30px; }
   .contact h2 { font-size: 55px; }
 }
-@media (prefers-reduced-motion: reduce) { .featureImage img, .textLink svg { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .featureImage img, .textLink svg, .navContact, .navContact::before, .navContactArrow svg { transition: none; } .navContact:hover, .navContact:focus-visible { transform: none; } }
 
 /* Original copy sets the rhythm; the visual system stays editorial and technical. */
 .hero { background: linear-gradient(115deg,#fff 25%,#f0f7fd); }
